@@ -1,0 +1,75 @@
+# compiled output
+/dist
+/tmp
+/out-tsc
+
+# dependencies
+.metadata/
+angular-front-end/node_modules
+nodejs-express-backend/node_modules
+
+# config
+
+# profiling files
+chrome-profiler-events.json
+speed-measure-plugin.json
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/
+
+# misc
+TODO.md
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+doc/
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# SPRING
+spring-backend/HELP.md
+spring-backend/target/
+spring-backend/!.mvn/wrapper/maven-wrapper.jar
+spring-backend/!**/src/main/**/target/
+spring-backend/!**/src/test/**/target/
+
+### STS ###
+spring-backend/.apt_generated
+spring-backend/.classpath
+spring-backend/.factorypath
+spring-backend/.project
+spring-backend/.settings
+spring-backend/.springBeans
+spring-backend/.sts4-cache
+
+### IntelliJ IDEA ###
+spring-backend/.idea
+spring-backend/*.iws
+spring-backend/*.iml
+spring-backend/*.ipr
+
+### NetBeans ###
+spring-backend/nbproject/private/
+spring-backend/nbbuild/
+spring-backend/dist/
+spring-backend/nbdist/
+spring-backend/.nb-gradle/
+spring-backend/build/
+spring-backend/!**/src/main/**/build/
+spring-backend/!**/src/test/**/build/
