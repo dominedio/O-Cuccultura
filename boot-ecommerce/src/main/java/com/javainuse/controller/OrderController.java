@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.validation.Valid;
 
-import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -42,7 +41,7 @@ public class OrderController {
 	
 	@GetMapping("/get")
 	public ResponseEntity<Object> getOrders(@RequestParam("page") int pages, @RequestParam("size") int size)
-			throws ResourceNotFoundException {
+			throws NoSuchElementFoundException {
 		Pageable page = PageRequest.of(pages, size, Sort.by("name").descending());
 		Page<Order> pagedResult = orderRepo.findAll(page);
 		Map<String, Object> responseBody = new LinkedHashMap<>();
@@ -51,14 +50,22 @@ public class OrderController {
 		if (pagedResult.hasContent()) {
 			return new ResponseEntity<>(responseBody, HttpStatus.OK);
 		} else {
-			throw new ResourceNotFoundException("Order not found in the database");
+			throw new NoSuchElementFoundException("Order not found in the database");
 		}
 	}
-
-	@GetMapping("/users/{id}")
+	
+	/*
+	@GetMapping("/getdelete")
+	public ResponseEntity<Object> getDeleteOrders()
+			throws ResourceNotFoundException {
+		
+	}
+	*/
+		
+	@GetMapping("/{id}")
 	public ResponseEntity<Order> getOrderById(@PathVariable("id") Long id)
 
-			throws ResourceNotFoundException {
+			throws NoSuchElementFoundException {
 		Order order = orderRepo.findById(id)
 				.orElseThrow(() -> new NoSuchElementFoundException("Order not found for this id :: " + id));
 		return ResponseEntity.ok().body(order);

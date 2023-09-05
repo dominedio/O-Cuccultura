@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -45,7 +44,7 @@ public class UserController {
 
 	@GetMapping("/get")
 	public ResponseEntity<Object> getUsers(@RequestParam("page") int pages, @RequestParam("size") int size)
-			throws ResourceNotFoundException {
+			throws NoSuchElementFoundException {
 		Pageable page = PageRequest.of(pages, size, Sort.by("name").descending());
 		Page<User> pagedResult = userRepo.findAll(page);
 		Map<String, Object> responseBody = new LinkedHashMap<>();
@@ -54,14 +53,14 @@ public class UserController {
 		if (pagedResult.hasContent()) {
 			return new ResponseEntity<>(responseBody, HttpStatus.OK);
 		} else {
-			throw new ResourceNotFoundException("Users not found in the database");
+			throw new NoSuchElementFoundException("Users not found in the database");
 		}
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<User> getUserById(@PathVariable("id") Long id)
 
-			throws ResourceNotFoundException {
+			throws NoSuchElementFoundException {
 		User user = userRepo.findById(id)
 				.orElseThrow(() -> new NoSuchElementFoundException("User not found for this id :: " + id));
 		return ResponseEntity.ok().body(user);
@@ -76,7 +75,7 @@ public class UserController {
 
 	@PutMapping(path = "/{id}/put", consumes = "application/json")
 	public ResponseEntity<User> putUser(@Valid @PathVariable("id") Long id, @RequestBody User user) 
-	  throws ResourceNotFoundException{
+	  throws NoSuchElementFoundException{
 			Optional<User> optionalUser = userRepo.findById(id);
 			if (optionalUser.isPresent()) {
 				User existingUser = optionalUser.get();
@@ -88,7 +87,7 @@ public class UserController {
 
 				return new ResponseEntity<>(userUpdated, HttpStatus.OK);
 			} else {
-				throw new ResourceNotFoundException("User not found for this id :: " + id);
+				throw new NoSuchElementFoundException("User not found for this id :: " + id);
 			}		
 	}
 /*

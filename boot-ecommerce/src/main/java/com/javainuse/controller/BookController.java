@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -48,7 +47,7 @@ public class BookController {
 
 	@GetMapping("/get")
 	public ResponseEntity<Object> getBooks(@RequestParam("page") int pages, @RequestParam("size") int size)
-			throws ResourceNotFoundException {
+			throws NoSuchElementFoundException {
 		Pageable page = PageRequest.of(pages, size, Sort.by("name").descending());
 		Page<Book> pagedResult = bookRepo.findAll(page);
 		Map<String, Object> responseBody = new LinkedHashMap<>();
@@ -57,14 +56,14 @@ public class BookController {
 		if (pagedResult.hasContent()) {
 			return new ResponseEntity<>(responseBody, HttpStatus.OK);
 		} else {
-			throw new ResourceNotFoundException("Book not found in the database");
+			throw new NoSuchElementFoundException("Book not found in the database");
 		}
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Book> getUserById(@PathVariable("id") Long id)
 
-			throws ResourceNotFoundException {
+			throws NoSuchElementFoundException {
 		Book book = bookRepo.findById(id)
 				.orElseThrow(() -> new NoSuchElementFoundException("User not found for this id :: " + id));
 		return ResponseEntity.ok().body(book);
